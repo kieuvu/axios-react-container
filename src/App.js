@@ -1,11 +1,6 @@
 import "./styles.css";
 import { useState } from "react";
-import axios from "./axios";
-
-const fetchPost = async (id) => {
-  const { data } = await axios.get("/posts/" + id);
-  return data;
-};
+import { fetchPost } from "./request";
 
 export default function App() {
   const [postId, setPostId] = useState(1);
