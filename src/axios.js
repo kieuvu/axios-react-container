@@ -1,24 +1,15 @@
-import axios from "axios";
 import { useEffect } from "react";
-
-// axios instance
-const instance = axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com/"
-});
+import instance from './request';
 
 const AxiosInterceptor = ({ children }) => {
-  console.log("interceptor");
-
   useEffect(() => {
-    console.log("useEffect");
-
     const resInterceptor = (response) => {
-      console.log("resInterceptor");
+      console.log("response", response);
       return response;
     };
 
     const errInterceptor = (error) => {
-      console.log("errInterceptor");
+      console.log("error", error);
       if (error.response.status === 401) {
         //redirect logic here
       }
@@ -37,5 +28,4 @@ const AxiosInterceptor = ({ children }) => {
   return children;
 };
 
-export default instance;
 export { AxiosInterceptor };
