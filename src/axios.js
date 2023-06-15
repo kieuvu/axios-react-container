@@ -5,21 +5,32 @@ const AxiosInterceptor = ({ children }) => {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const interceptor = instance.interceptors.response.use(
+    const requestInterceptor = axios.interceptors.request.use(
+      request => {
+        // Modify request here (adding/changing headers, body...)
+        return request;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+
+    const responseInterceptor = instance.interceptors.response.use(
       response => {
-        console.log("response", response);
         return response;
       },
       error => {
-        console.log("error", error);
-        // handle error here
-        return Promise.reject();
+        // Handle error here
+        return Promise.reject(error);
       }
     );
 
     setIsComplete(true);
 
-    return () => instance.interceptors.response.eject(interceptor);
+    return () => {
+      instance.interceptors.request.eject(requestInterceptor);
+      instance.interceptors.response.eject(responseInterceptor);
+    };
   }, []);
 
   return isComplete && children;
